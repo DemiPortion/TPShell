@@ -73,7 +73,7 @@ log_message "Mises à jour automatiques et surveillance de l'espace disque confi
 
 # Vérification des commandes nécessaires
 echo "Vérification des commandes nécessaires..."
-commands=("ufw" "ssh" "systemctl" "chpasswd" "mail" "apt-get" "chmod" "chown")
+commands=("ufw" "ssh" "chpasswd")
 
 for cmd in "${commands[@]}"; do
   check_command "$cmd"

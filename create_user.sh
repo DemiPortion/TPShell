@@ -40,4 +40,4 @@ create_user() {
 }
 
 # Exécuter la fonction create_user
-# create_user
+create_user
