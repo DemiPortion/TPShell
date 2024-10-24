@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Chemin vers le fichier de clé publique
-SSH_KEY_PATH="./Configuration/id_rsa.pub"
+SSH_KEY_PATH="../Configuration/id_rsa.pub"
 
 # Vérifier si le fichier de clé publique existe
 if [ ! -f "$SSH_KEY_PATH" ]; then
