@@ -21,4 +21,4 @@ check_disk_space() {
 while true; do
   check_disk_space
   sleep 86400  # Pause de 24 heures (86400 secondes)
-done
+done &
