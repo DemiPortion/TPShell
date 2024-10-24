@@ -20,3 +20,6 @@ CONFIG_FILES_TO_BACKUP=(
 )
 # Nom de l'utilisateur à ajouter au groupe sudo
 DEFAULT_USER="Admin"
+
+# Mot de passe par défaut pour l'utilisateur
+DEFAULT_PASSWORD="Admin"

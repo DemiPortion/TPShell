@@ -6,7 +6,7 @@ source ./Configuration/config.sh
 # Vérification si le script est exécuté en tant que root
 if [ "$EUID" -ne 0 ]; then
   echo "Le script doit être exécuté en tant que root. Relance du script avec sudo..."
-  exec sudo "$0" "$@"
+  exec sudo "$0" "$@"  
   exit 1
 else
   echo "Script exécuté en tant que root."
@@ -30,7 +30,6 @@ for file in "${CONFIG_FILES_TO_CHECK[@]}"; do
   else
     log_message "Erreur : Fichier $file non trouvé, mais le script continue."
     echo "Attention : Le fichier $file est introuvable, mais le script continue."
-    # Ne pas interrompre le script, continuer
   fi
 done
 
@@ -42,7 +41,6 @@ for file in "${CONFIG_FILES_TO_BACKUP[@]}"; do
   else
     log_message "Erreur lors de la sauvegarde du fichier $file, mais le script continue."
     echo "Attention : Impossible de sauvegarder $file, mais le script continue."
-    # Ne pas interrompre le script, continuer
   fi
 done
 
@@ -73,16 +71,15 @@ echo "Vérifications des permissions critiques et des commandes nécessaires..."
 check_permissions "/etc/ssh/sshd_config" "644"
 check_command "ufw"
 
-# Création d'un utilisateur et ajout au groupe sudo
-create_user() {
-  local username="$DEFAULT_USER"
-  useradd -m "$username"
-  passwd "$username"
-  usermod -aG sudo "$username"
-  echo "Utilisateur $username ajouté avec succès au groupe sudo."
-}
-
-create_user
+# Étape 7 : Création d'un utilisateur et ajout au groupe sudo
+echo "Création d'un utilisateur..."
+if source ./create_user.sh; then
+  log_message "Utilisateur créé avec succès."
+else
+  log_message "Erreur lors de la création de l'utilisateur."
+  echo "Erreur : Échec de la création de l'utilisateur."
+  exit 1
+fi
 
 echo "Script terminé avec succès."
 log_message "Script terminé avec succès."
