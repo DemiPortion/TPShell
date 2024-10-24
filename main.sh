@@ -94,7 +94,7 @@ for file in "${files[@]}"; do
   check_permissions "$file" "644"
 done
 
-# Vérification des services essentiels
+# Vérification des services essentiels 
 echo "Vérification des services SSH et UFW..."
 services=("ssh" "ufw")
 
@@ -102,10 +102,22 @@ for service in "${services[@]}"; do
   if systemctl is-active --quiet "$service"; then
     echo "Service $service est actif."
   else
-    echo "Alerte : Le service $service n'est pas actif."
-    exit 1
+    echo "Alerte : Le service $service n'est pas actif. Tentative de démarrage..."
+    
+    # Tentative d'activation du service s'il n'est pas actif
+    systemctl start "$service"
+
+    # Vérifier à nouveau si le service est actif après la tentative d'activation
+    if systemctl is-active --quiet "$service"; then
+      echo "Service $service a été activé avec succès."
+    else
+      echo "Erreur : Impossible d'activer le service $service."
+      log_message "Erreur : Impossible d'activer le service $service."
+      # Ne pas interrompre le script, continuer
+    fi
   fi
 done
+
 
 # Étape 7 : Création d'un utilisateur et ajout au groupe sudo
 echo "Création d'un utilisateur..."
