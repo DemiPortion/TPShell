@@ -18,3 +18,6 @@ configure_firewall() {
   ufw --force enable
   echo "Pare-feu UFW configuré et activé."
 }
+
+# Appel de la fonction pour exécuter la configuration du pare-feu
+configure_firewall
