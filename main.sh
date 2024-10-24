@@ -28,8 +28,9 @@ for file in "${CONFIG_FILES_TO_CHECK[@]}"; do
   if check_file "$file"; then
     log_message "Fichier $file vérifié avec succès."
   else
-    log_message "Erreur : Fichier $file non trouvé."
-    exit 1
+    log_message "Erreur : Fichier $file non trouvé, mais le script continue."
+    echo "Attention : Le fichier $file est introuvable, mais le script continue."
+    # Ne pas interrompre le script, continuer
   fi
 done
 
@@ -39,8 +40,9 @@ for file in "${CONFIG_FILES_TO_BACKUP[@]}"; do
   if backup_file "$file"; then
     log_message "Sauvegarde du fichier $file réalisée."
   else
-    log_message "Erreur lors de la sauvegarde du fichier $file."
-    exit 1
+    log_message "Erreur lors de la sauvegarde du fichier $file, mais le script continue."
+    echo "Attention : Impossible de sauvegarder $file, mais le script continue."
+    # Ne pas interrompre le script, continuer
   fi
 done
 
@@ -56,8 +58,8 @@ source ./firewall.sh
 if [ $? -eq 0 ]; then
   log_message "Pare-feu activé et configuré avec succès."
 else
-  log_message "Erreur lors de la configuration du pare-feu."
-  exit 1
+  log_message "Erreur lors de la configuration du pare-feu, mais le script continue."
+  echo "Attention : Problème lors de l'activation du pare-feu, mais le script continue."
 fi
 
 # Étape 5 : Automatisation et surveillance
