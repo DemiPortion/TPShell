@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Chemin du fichier de clé SSH publique
-SSH_KEY_PATH="id_rsa.pub"
+SSH_KEY_PATH="/home/user/script/TPShell/Configuration/id_rsa.pub"
 
 # Fichiers et dossiers à vérifier avant toute modification (sans SSH et UFW)
 CONFIG_FILES_TO_CHECK=(
