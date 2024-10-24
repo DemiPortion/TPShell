@@ -20,25 +20,3 @@ chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
 
 echo "La clé a été ajoutée à ~/.ssh/authorized_keys avec succès."
-
-# Modifier la configuration SSH pour n'accepter que les connexions par clé
-CONFIG_FILE="/etc/ssh/sshd_config"
-
-# Vérifier si la ligne "PasswordAuthentication" existe et la modifier
-if grep -q "^PasswordAuthentication yes" "$CONFIG_FILE"; then
-    sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' "$CONFIG_FILE"
-else
-    echo "PasswordAuthentication no" >> "$CONFIG_FILE"
-fi
-
-# Vérifier si la ligne "ChallengeResponseAuthentication" existe et la modifier
-if grep -q "^ChallengeResponseAuthentication yes" "$CONFIG_FILE"; then
-    sed -i 's/^ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/' "$CONFIG_FILE"
-else
-    echo "ChallengeResponseAuthentication no" >> "$CONFIG_FILE"
-fi
-
-# Redémarrer le service SSH pour appliquer les changements
-systemctl restart sshd
-
-echo "La configuration SSH a été mise à jour pour n'accepter que les connexions par clé."
