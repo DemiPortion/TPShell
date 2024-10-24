@@ -3,6 +3,9 @@
 # Charger le fichier de configuration
 source ./Configuration/config.sh
 
+# Inclure utils.sh pour accéder aux fonctions check_permissions et check_command
+source ./utils.sh
+
 # Vérification si le script est exécuté en tant que root
 if [ "$EUID" -ne 0 ]; then
   echo "Le script doit être exécuté en tant que root. Relance du script avec sudo..."
