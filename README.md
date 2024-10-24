@@ -1,4 +1,4 @@
-main.sh = Script principal | En cours,
+main.sh = Script principal | A tester,
 
 /Fonctions/connexion_ssh.sh  | Fonctionnel, 
 
