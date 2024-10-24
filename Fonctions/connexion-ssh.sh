@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# Définir la clé SSH publique comme une variable
-SSH_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCmW8sKyRIfeCT/igaSXl/sXzEE6ahQ83qY0qgucb3sO7EL8Z31xUoOJxtnZgVVnjVqnKExpE20JOYBid/+wUZAZHKMeKs2bFWqxO5oVKOzg0R9o+JTa4ykrvjKnIRwtQ7u3B4PpL+GUg0bepit5iMrKibe35sV+X3lIKJfqcFJwZUyVAEgS3fW05z9OOnJVomK6UcnygMPRomU08zFLK+OaqLEHbltJnnBMozQTNarhoTUTDdShqObyOFLA8QpbyKMsdApFa059Crp+JMIvYtxr/7RFIPbYzvXgSWWmEZ5BrR0uETk9td+RhTdbQzouvUmOJfM409fChI+VDhYuOwHz0ClnBzs82/Bzim6tvP9Ueb6MFPUwvTUaMApTKwBqtYiyJ1XmmU9Wg22YXN/Yh7oWqd4itrkvEQ6me4+fYe5pZ97291MP5ukxQxe5ZhAsmJXnSPpNaCiaKSGdjtZAp8nfE3RwZM0KPu+L47Y+6Nu1jHhQpSLqge23aPdMvmDaea9bFf9hX34BiuYSpoMxAj259ihf8wlvc8Cj/8s5HC359mkw7IR9knNJCa50thNoOpRk4CaTyX8gJCumGhUgoeT+n5oOI6gzw6y6BCtHRFUe0jsg/JWPUuSZziuX8A9WVOtw2iN/tM5hq2uNsJRY2r3VbT8wHMEvaevFUuvp3JKfw== marc.telena@gmail.com"
+# Chemin vers le fichier de clé publique
+SSH_KEY_PATH="./Configuration/id_rsa.pub"
+
+# Vérifier si le fichier de clé publique existe
+if [ ! -f "$SSH_KEY_PATH" ]; then
+    echo "Erreur : Le fichier de clé publique $SSH_KEY_PATH n'existe pas."
+    exit 1
+fi
 
 # Créer le dossier ~/.ssh s'il n'existe pas
 mkdir -p ~/.ssh
 
 # Ajouter la clé publique à authorized_keys
-echo "$SSH_KEY" >> ~/.ssh/authorized_keys
+cat "$SSH_KEY_PATH" >> ~/.ssh/authorized_keys
 
 # Ajuster les permissions
 chmod 700 ~/.ssh
