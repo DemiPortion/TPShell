@@ -1,37 +1,44 @@
 #!/bin/bash
 
-# Demander à l'utilisateur de fournir son nom de session Windows
-read -p "Entrez le nom de votre session Windows : " nomsession
+# Chemin vers le fichier de clé publique
+SSH_KEY_PATH="../Configuration/id_rsa.pub"
 
-# Chemin de la clé publique SSH sur la machine Windows
-chemin_cle="C:/Users/$nomsession/.ssh/id_rsa.pub"
-
-# Demander l'adresse IP de la machine Windows
-read -p "Entrez l'adresse IP de la machine Windows : " ip_windows
-
-# Vérifier si l'adresse IP a été fournie
-if [ -z "$ip_windows" ]; then
-    echo "Vous devez fournir une adresse IP valide."
+# Vérifier si le fichier de clé publique existe
+if [ ! -f "$SSH_KEY_PATH" ]; then
+    echo "Erreur : Le fichier de clé publique $SSH_KEY_PATH n'existe pas."
     exit 1
 fi
 
-echo "Adresse IP de la machine Windows : $ip_windows"
+# Créer le dossier ~/.ssh s'il n'existe pas
+mkdir -p ~/.ssh
 
-# Afficher la commande utilisée pour récupérer la clé
-echo "Commande utilisée pour récupérer la clé : scp $nomsession@$ip_windows:$chemin_cle /tmp/"
+# Ajouter la clé publique à authorized_keys
+cat "$SSH_KEY_PATH" >> ~/.ssh/authorized_keys
 
-# Vérifier si le fichier id_rsa.pub existe sur la machine Windows
-if ssh "$nomsession@$ip_windows" "[ -f '$chemin_cle' ]"; then
-    echo "Clé SSH trouvée sur la machine Windows, préparation pour la copie..."
+# Ajuster les permissions
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
 
-    # Copier la clé publique via SCP vers /tmp sur la VM distante
-    scp "$nomsession@$ip_windows:$chemin_cle" /tmp/
-    
-    if [ $? -eq 0 ]; then
-        echo "Clé copiée avec succès dans /tmp sur la VM."
-    else
-        echo "Erreur lors de la copie de la clé depuis la machine Windows."
-    fi
+echo "La clé a été ajoutée à ~/.ssh/authorized_keys avec succès."
+
+# Modifier la configuration SSH pour n'accepter que les connexions par clé
+CONFIG_FILE="/etc/ssh/sshd_config"
+
+# Vérifier si la ligne "PasswordAuthentication" existe et la modifier
+if grep -q "^PasswordAuthentication yes" "$CONFIG_FILE"; then
+    sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' "$CONFIG_FILE"
 else
-    echo "Clé SSH non trouvée sur la machine Windows. Vérifiez que le fichier existe à l'emplacement : $chemin_cle"
+    echo "PasswordAuthentication no" >> "$CONFIG_FILE"
 fi
+
+# Vérifier si la ligne "ChallengeResponseAuthentication" existe et la modifier
+if grep -q "^ChallengeResponseAuthentication yes" "$CONFIG_FILE"; then
+    sed -i 's/^ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/' "$CONFIG_FILE"
+else
+    echo "ChallengeResponseAuthentication no" >> "$CONFIG_FILE"
+fi
+
+# Redémarrer le service SSH pour appliquer les changements
+systemctl restart sshd
+
+echo "La configuration SSH a été mise à jour pour n'accepter que les connexions par clé."
