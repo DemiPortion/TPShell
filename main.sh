@@ -70,9 +70,42 @@ source ./monitor_disk_space.sh
 log_message "Mises à jour automatiques et surveillance de l'espace disque configurées."
 
 # Étape 6 : Vérifications finales et utilitaires
-echo "Vérifications des permissions critiques et des commandes nécessaires..."
-check_permissions "/etc/ssh/sshd_config" "644"
-check_command "ufw"
+
+# Vérification des commandes nécessaires
+echo "Vérification des commandes nécessaires..."
+commands=("ufw" "ssh" "systemctl" "chpasswd" "mail" "apt-get" "chmod" "chown")
+
+for cmd in "${commands[@]}"; do
+  check_command "$cmd"
+done
+
+# Vérification des permissions critiques
+echo "Vérification des permissions critiques..."
+
+files=(
+    "/etc/ssh/sshd_config"
+    "/etc/hostname"
+    "/etc/hosts"
+    "/etc/fstab"
+    "/etc/network/interfaces"
+)
+
+for file in "${files[@]}"; do
+  check_permissions "$file" "644"
+done
+
+# Vérification des services essentiels
+echo "Vérification des services SSH et UFW..."
+services=("ssh" "ufw")
+
+for service in "${services[@]}"; do
+  if systemctl is-active --quiet "$service"; then
+    echo "Service $service est actif."
+  else
+    echo "Alerte : Le service $service n'est pas actif."
+    exit 1
+  fi
+done
 
 # Étape 7 : Création d'un utilisateur et ajout au groupe sudo
 echo "Création d'un utilisateur..."
