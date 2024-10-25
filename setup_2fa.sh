@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Charger le fichier de configuration
+source ./Configuration/config.sh
+
 # Installation de Google Authenticator PAM
 apt-get update
 apt-get install -y libpam-google-authenticator
@@ -10,9 +13,15 @@ if ! command -v google-authenticator &> /dev/null; then
   exit 1
 fi
 
+# Vérifier si l'utilisateur Admin existe
+if ! id "$DEFAULT_USER" &>/dev/null; then
+  echo "Erreur : L'utilisateur $DEFAULT_USER n'existe pas."
+  exit 1
+fi
+
 # Configuration pour chaque utilisateur
-echo "Configuration de Google Authenticator pour l'utilisateur Admin"
-sudo -u Admin google-authenticator -t -d -f -r 3 -R 30 -W
+echo "Configuration de Google Authenticator pour l'utilisateur $DEFAULT_USER"
+sudo -u "$DEFAULT_USER" google-authenticator -t -d -f -r 3 -R 30 -W
 
 # Vérification de l'exécution correcte
 if [ $? -ne 0 ]; then
