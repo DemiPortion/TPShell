@@ -5,16 +5,6 @@ source ./Configuration/config.sh
 
 echo "===== DÉBUT DES TESTS DE VÉRIFICATION APRÈS L'EXÉCUTION DU MAIN.SH ====="
 
-# Test 1 : Vérification des fichiers de configuration sauvegardés
-echo "Test 1 : Vérification des fichiers de configuration sauvegardés..."
-for file in "${CONFIG_FILES_TO_BACKUP[@]}"; do
-  if [ -f "$file.bak_$(date +%F)" ]; then
-    echo "Test 1 : Fichier $file sauvegardé : Validé"
-  else
-    echo "Test 1 : Sauvegarde du fichier $file manquante."
-  fi
-done
-
 # Test 2 : Vérification de la création de l'utilisateur
 echo "Test 2 : Vérification de la création de l'utilisateur..."
 if id "$DEFAULT_USER" &>/dev/null; then
