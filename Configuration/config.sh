@@ -23,3 +23,6 @@ DEFAULT_USER="Admin"
 
 # Mot de passe par défaut pour l'utilisateur
 DEFAULT_PASSWORD="Admin"
+
+# Liste des services à désactiver
+DISABLED_SERVICES=("avahi-daemon" "cups" "bluetooth")
