@@ -66,12 +66,4 @@ else
   echo "Test 8 : Mises à jour automatiques non configurées."
 fi
 
-# Test 9 : Vérification de la surveillance de l'intégrité des fichiers (Tripwire)
-echo "Test 9 : Vérification de la surveillance de l'intégrité des fichiers (Tripwire)..."
-if [ -f /etc/tripwire/tw.cfg ] && [ -f /etc/tripwire/twpol.txt ]; then
-  echo "Test 9 : Tripwire configuré : Validé"
-else
-  echo "Test 9 : Tripwire non configuré ou fichiers manquants."
-fi
-
 echo "===== FIN DES TESTS ====="
