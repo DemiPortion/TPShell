@@ -7,7 +7,6 @@ apt-get install -y aide
 # Initialiser la base de données d'AIDE (cela peut prendre un peu de temps)
 echo "Initialisation de la base de données AIDE en cours..."
 aideinit &  # Exécuter en arrière-plan
-wait        # Attendre que l'initialisation soit terminée avant de continuer
 
 # Mettre à jour la configuration d'AIDE pour inclure les fichiers critiques
 echo "Mise à jour de la configuration AIDE pour les fichiers critiques..."
