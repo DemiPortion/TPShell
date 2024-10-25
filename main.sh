@@ -9,7 +9,7 @@ source ./utils.sh
 # Vérification si le script est exécuté en tant que root
 if [ "$EUID" -ne 0 ]; then
   echo "Le script doit être exécuté en tant que root. Relance du script avec sudo..."
-  exec sudo "$0" "$@"  
+  exec sudo "$0" "$@"
   exit 1
 else
   echo "Script exécuté en tant que root."
@@ -47,13 +47,33 @@ for file in "${CONFIG_FILES_TO_BACKUP[@]}"; do
   fi
 done
 
-# Étape 3 : Installation et configuration des services (SSH)
+# Étape 3 : Création d'un utilisateur et ajout au groupe sudo
+echo "Création d'un utilisateur..."
+if source ./create_user.sh; then
+  log_message "Utilisateur créé avec succès."
+else
+  log_message "Erreur lors de la création de l'utilisateur."
+  echo "Erreur : Échec de la création de l'utilisateur."
+  exit 1
+fi
+
+# Étape 4 : Installation et configuration des services (SSH)
 echo "Installation et configuration de SSH..."
 source ./serverSSH.sh
 source ./connexion-ssh.sh "$SSH_KEY_PATH"
 source ./durcissement-ssh.sh
 
-# Étape 4 : Sécurisation du système (Pare-feu)
+# Étape 5 : Activation de l'authentification à deux facteurs (Google Authenticator)
+echo "Activation de la double authentification pour SSH (Google Authenticator)..."
+source ./setup_google_authenticator.sh
+if [ $? -eq 0 ]; then
+  log_message "Double authentification activée avec succès."
+else
+  log_message "Erreur lors de l'activation de la double authentification, mais le script continue."
+  echo "Attention : Échec de la configuration de Google Authenticator, mais le script continue."
+fi
+
+# Étape 6 : Sécurisation du système (Pare-feu)
 echo "Configuration et activation du pare-feu..."
 source ./firewall.sh
 if [ $? -eq 0 ]; then
@@ -63,13 +83,13 @@ else
   echo "Attention : Problème lors de l'activation du pare-feu, mais le script continue."
 fi
 
-# Étape 5 : Automatisation et surveillance
+# Étape 7 : Automatisation et surveillance
 echo "Configuration des mises à jour automatiques et surveillance de l'espace disque..."
 source ./updates.sh
 source ./monitor_disk_space.sh
 log_message "Mises à jour automatiques et surveillance de l'espace disque configurées."
 
-# Étape 6 : Vérifications finales et utilitaires
+# Étape 8 : Vérifications finales et utilitaires
 
 # Vérification des commandes nécessaires
 echo "Vérification des commandes nécessaires..."
@@ -118,20 +138,15 @@ for service in "${services[@]}"; do
   fi
 done
 
-# Etape 7 : Désactivation des services inutiles
+# Etape 9 : Désactivation des services inutiles
 echo "Désactivation des services inutiles..."
 source ./disable_services.sh
 log_message "Services inutiles désactivés avec succès."
 
-# Étape 8 : Création d'un utilisateur et ajout au groupe sudo
-echo "Création d'un utilisateur..."
-if source ./create_user.sh; then
-  log_message "Utilisateur créé avec succès."
-else
-  log_message "Erreur lors de la création de l'utilisateur."
-  echo "Erreur : Échec de la création de l'utilisateur."
-  exit 1
-fi
+# Étape 10 : Surveillance de l'intégrité des fichiers avec Tripwire
+echo "Mise en place de la surveillance de l'intégrité des fichiers..."
+source ./file_integrity_monitor_tripwire.sh
+log_message "Surveillance de l'intégrité des fichiers configurée avec succès."
 
 echo "Script terminé avec succès."
 log_message "Script terminé avec succès."

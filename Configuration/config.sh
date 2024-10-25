@@ -26,3 +26,6 @@ DEFAULT_PASSWORD="Admin"
 
 # Liste des services à désactiver
 DISABLED_SERVICES=("avahi-daemon" "cups" "bluetooth")
+
+# Adresse IP autorisées pour SSH
+ALLOWED_IPS="192.168.56.1"
