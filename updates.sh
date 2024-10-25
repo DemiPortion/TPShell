@@ -11,7 +11,7 @@ configure_updates() {
   fi
 
   echo "Installation du paquet unattended-upgrades..."
-  if apt-get install -y unattended-upgrades; then
+  if apt-get install -y -y unattended-upgrades; then
     echo "Paquet unattended-upgrades installé avec succès."
   else
     echo "Erreur lors de l'installation du paquet unattended-upgrades. Abandon."
