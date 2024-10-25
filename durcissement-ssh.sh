@@ -35,12 +35,12 @@ else
 fi
 
 # 4. Utilisation d’une liste blanche d'adresses IP pour SSH
-#echo "Mise en place d'une liste blanche d'adresses IP autorisées pour SSH : $ALLOWED_IPS..."
-#if ! grep -q "^Match Address" "$CONFIG_FILE"; then
-#    for ip in $ALLOWED_IPS; do
-#        echo -e "\nMatch Address $ip\n    AllowUsers $ALLOWED_USERS" >> "$CONFIG_FILE"
-#    done
-#fi
+echo "Mise en place d'une liste blanche d'adresses IP autorisées pour SSH : $ALLOWED_IPS..."
+if ! grep -q "^Match Address" "$CONFIG_FILE"; then
+   for ip in $ALLOWED_IPS; do
+       echo -e "\nMatch Address $ip\n    AllowUsers $ALLOWED_USERS" >> "$CONFIG_FILE"
+   done
+fi
 
 # Vérifications supplémentaires pour renforcer la configuration
 
