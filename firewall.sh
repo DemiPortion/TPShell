@@ -11,7 +11,6 @@ configure_firewall() {
 
   # Autoriser les connexions SSH, HTTP, et HTTPS
   ufw allow ssh
-  ufw allow http
   ufw allow https
 
   # Activer UFW
