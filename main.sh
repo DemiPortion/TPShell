@@ -118,8 +118,12 @@ for service in "${services[@]}"; do
   fi
 done
 
+# Etape 7 : Désactivation des services inutiles
+echo "Désactivation des services inutiles..."
+source ./disable_services.sh
+log_message "Services inutiles désactivés avec succès."
 
-# Étape 7 : Création d'un utilisateur et ajout au groupe sudo
+# Étape 8 : Création d'un utilisateur et ajout au groupe sudo
 echo "Création d'un utilisateur..."
 if source ./create_user.sh; then
   log_message "Utilisateur créé avec succès."
