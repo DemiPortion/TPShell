@@ -21,7 +21,6 @@ EOL
 # Recréer la base de données après avoir ajouté les nouveaux fichiers à surveiller
 echo "Recréation de la base de données AIDE..."
 aide --init &  # Exécuter en arrière-plan
-wait           # Attendre que la recréation soit terminée
 
 # Déplacer la nouvelle base de données pour la rendre active
 mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
@@ -29,6 +28,5 @@ mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
 # Lancer une vérification initiale des fichiers
 echo "Vérification initiale des fichiers surveillés par AIDE..."
 aide --check &  # Exécuter en arrière-plan
-wait            # Attendre que la vérification soit terminée
 
 echo "AIDE configuré pour surveiller les fichiers système critiques."
