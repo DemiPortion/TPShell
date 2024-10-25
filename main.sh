@@ -65,7 +65,7 @@ source ./durcissement-ssh.sh
 
 # Étape 5 : Activation de l'authentification à deux facteurs (Google Authenticator)
 echo "Activation de la double authentification pour SSH (Google Authenticator)..."
-source ./setup_google_authenticator.sh
+source ./setup_2fa.sh
 if [ $? -eq 0 ]; then
   log_message "Double authentification activée avec succès."
 else
