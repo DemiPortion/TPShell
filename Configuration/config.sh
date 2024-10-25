@@ -28,4 +28,4 @@ DEFAULT_PASSWORD="Admin"
 DISABLED_SERVICES=("avahi-daemon" "cups" "bluetooth")
 
 # Adresse IP autorisées pour SSH
-ALLOWED_IPS="10.213.67.171" # TONY 192.168.56.1 MARC
+ALLOWED_IPS="192.168.56.1" # TONY 192.168.56.1 MARC 10.213.67.171
