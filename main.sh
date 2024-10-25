@@ -144,9 +144,9 @@ source ./disable_services.sh
 log_message "Services inutiles désactivés avec succès."
 
 # Étape 10 : Surveillance de l'intégrité des fichiers avec Tripwire
-echo "Mise en place de la surveillance de l'intégrité des fichiers..."
-source ./file_integrity_monitor_tripwire.sh
-log_message "Surveillance de l'intégrité des fichiers configurée avec succès."
+# echo "Mise en place de la surveillance de l'intégrité des fichiers..."
+# source ./file_integrity_monitor_tripwire.sh
+# log_message "Surveillance de l'intégrité des fichiers configurée avec succès."
 
 echo "Script terminé avec succès."
 log_message "Script terminé avec succès."
